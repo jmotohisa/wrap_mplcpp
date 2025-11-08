@@ -1,0 +1,25 @@
+# This Makefile works OK with ./configure
+
+ACLOCAL_AMFLAGS = -I m4
+
+test1: test1.c 
+	gcc -c test1.c
+	g++ -o test1 test1.o .libs/libwrapmplcpp.a -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib -L/Users/motohisa/miniconda3/envs/jm/lib -lpython3.8
+
+
+bin_PROGRAMS = test2 test3
+
+# test2 works ok
+test2_SOURCES = test1.c 
+test2_LDADD = libwrapmplcpp.la 
+test2_LDFLAGS = -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib -lpython3.8
+
+# test3 works ok
+test3_SOURCES = test1.c wrap_matplotlibcpp.cpp
+test3_CXXFLAGS = $(PYTHON_INCLUDES)
+test3_LDFLAGS = -lpython3.8 -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib
+
+include_HEADERS = wrap_matplotlibcpp.h
+lib_LTLIBRARIES = libwrapmplcpp.la
+libwrapmplcpp_la_SOURCES = wrap_matplotlibcpp.cpp 
+libwrapmplcpp_la_CXXFLAGS = $(PYTHON_INCLUDES)

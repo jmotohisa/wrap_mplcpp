@@ -11,12 +11,17 @@ install-sh
 libtool
 *.a
 *.o
+*.la
+*.lo
 ltmain.sh
 mr/
 missing
 stamp-h1
 test1
+test2
+test3
 .deps/
+.libs/
 Makefile
 Makefile.in
 autoscan.log

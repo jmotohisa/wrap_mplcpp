@@ -2,21 +2,22 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.72])
-AC_INIT(testmpl, 0.1a, motohisa@ist.hokudai.ac.jp)
+AC_INIT(test1, 0.1a, motohisa@ist.hokudai.ac.jp)
 AC_CONFIG_SRCDIR([matplotlibcpp.h])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 dnl AC_PROG_LIBTOOL
 
-SHARED_VERSION_INFO="0:0:0" # CURRENT:REVISION:AGE
 AC_CONFIG_MACRO_DIR([m4])
+
+SHARED_VERSION_INFO="0:0:0" # CURRENT:REVISION:AGE
 AC_SUBST(SHARED_VERSION_INFO)
+AC_ENABLE_SHARED
+LT_INIT
 
 dnl AM_INIT_AUTOMAKE
 dnl AC_PROG_LIBTOOL
 
-AC_ENABLE_SHARED
-LT_INIT
 
 # Checks for programs.
 AC_PROG_CXX
@@ -63,6 +64,8 @@ else
       test -n "$pinc" && PYTHON_LIBS="-L$pinc"
       save_LDFLAGS=$LDFLAGS
       LDFLAGS="$LDFLAGS $PYTHON_LIBS"
+      dnl AC_CHECK_LIB([python],[], [AC_MSG_WARN([disabling Python wrappers])
+      dnl 				                                 have_python=no])
 
       AC_MSG_CHECKING([for Python include directory])
       pinc=`echo "import sysconfig; print(sysconfig.get_path('include'))" | $PYTHON - 2>/dev/null`
