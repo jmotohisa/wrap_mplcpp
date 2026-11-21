@@ -30,4 +30,4 @@ compile
 aclocal.m4
 autom4te.cache/
 m4/
-wrapmplcpp.pc
+libwrapmplcpp.pc

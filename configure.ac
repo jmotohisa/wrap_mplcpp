@@ -147,5 +147,5 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 
-AC_CONFIG_FILES([Makefile src/Makefile wrapmplcpp.pc examples/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile libwrapmplcpp.pc examples/Makefile])
 AC_OUTPUT
