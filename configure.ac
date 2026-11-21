@@ -32,7 +32,7 @@ AC_CHECK_LIB([m], [main])
 ##############################################################################
 
 AC_ARG_WITH(python,
-	[AS_HELP_STRING([--without-python],[compile without Python interface])],
+        [AS_HELP_STRING([--without-python],[compile without Python interface])],
         with_python=$withval,with_python=yes)
 
 AC_CHECK_PROG(SWIG, swig, swig, echo)
@@ -57,18 +57,21 @@ else
 
     AM_PATH_PYTHON([],[have_python=yes],[have_python=no])
     if test $have_python = yes; then
+      AC_MSG_CHECKING([for Python library flags])
+      py_libdir=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR') or '')" 2>/dev/null`
+      py_libname=`$PYTHON -c "import sysconfig, re; print(re.sub(r'^lib|\.(so|dylib|a).*$', '', sysconfig.get_config_var('LDLIBRARY') or ''))" 2>/dev/null`
+      if test -n "$py_libdir" && test -n "$py_libname"; then
+        PYTHON_LIBS="-L$py_libdir -Wl,-rpath,$py_libdir -l$py_libname"
+      elif test -n "$py_libdir"; then
+        PYTHON_LIBS="-L$py_libdir"
+      fi
+      AC_MSG_RESULT([${PYTHON_LIBS:-unknown}])
 
-      AC_MSG_CHECKING([for Python library directory])
-      pinc=`echo "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))" | $PYTHON - 2>/dev/null`
-      AC_MSG_RESULT([${pinc:-unknown}])
-      test -n "$pinc" && PYTHON_LIBS="-L$pinc"
       save_LDFLAGS=$LDFLAGS
       LDFLAGS="$LDFLAGS $PYTHON_LIBS"
-      dnl AC_CHECK_LIB([python],[], [AC_MSG_WARN([disabling Python wrappers])
-      dnl 				                                 have_python=no])
 
       AC_MSG_CHECKING([for Python include directory])
-      pinc=`echo "import sysconfig; print(sysconfig.get_path('include'))" | $PYTHON - 2>/dev/null`
+      pinc=`$PYTHON -c "import sysconfig; print(sysconfig.get_path('include'))" 2>/dev/null`
       AC_MSG_RESULT([${pinc:-unknown}])
       test -n "$pinc" && PYTHON_INCLUDES="-I$pinc"
       save_CPPFLAGS=$CPPFLAGS
@@ -78,7 +81,7 @@ else
 
       if test $have_python = yes; then
         AC_MSG_CHECKING([for Numpy include directory])
-        pinc=`echo "import numpy; print (numpy.get_include())" | $PYTHON - 2>/dev/null`
+        pinc=`$PYTHON -c "import numpy; print(numpy.get_include())" 2>/dev/null`
         AC_MSG_RESULT([${pinc:-unknown}])
         test -n "$pinc" && PYTHON_INCLUDES="$PYTHON_INCLUDES -I$pinc"
         CPPFLAGS="$save_CPPFLAGS $PYTHON_INCLUDES"
@@ -97,15 +100,20 @@ else
           fi
         fi
       fi
-
       CPPFLAGS=$save_CPPFLAGS
+      LDFLAGS=$save_LDFLAGS
     fi # have_python
 
   fi # enabled_shared
 fi # with_python
 
+if test x"$have_python" = "xyes"; then
+   AC_DEFINE(HAVE_PYTHON, 1, [define if we have PYTHON])
+fi
+
 AC_SUBST(PYTHON_INCLUDES)
 AC_SUBST(PYTHON_LIBS)
+
 AM_CONDITIONAL(WITH_PYTHON, test x"$have_python" = "xyes")
 AM_CONDITIONAL(WITH_COVERAGE, test x"$with_coverage" = "xyes")
 
