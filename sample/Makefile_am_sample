@@ -1,0 +1,10 @@
+bin_PROGRAMS = myapp
+myapp_SOURCES = main.c
+
+myapp_CPPFLAGS = $(AM_CPPFLAGS)
+myapp_LDADD =
+
+if WITH_WRAPMPLCPP
+myapp_CPPFLAGS += $(WRAPMPLCPP_CFLAGS)
+myapp_LDADD += $(WRAPMPLCPP_LIBS)
+endif

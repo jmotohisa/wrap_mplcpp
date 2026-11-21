@@ -1,0 +1,30 @@
+###################################################
+# check for libwrapmplcpp 
+# --with-warpmplcpp / --without-warpmplcpp オプションの定義（デフォルトは auto）
+AC_ARG_WITH([warpmplcpp],
+  [AS_HELP_STRING([--with-warpmplcpp], [use libwarpmplcpp (default: auto)])],
+  [with_warpmplcpp=$withval],
+  [with_warpmplcpp=auto])
+
+have_warpmplcpp=no
+if test "x$with_warpmplcpp" != "xno"; then
+  PKG_CHECK_MODULES([WARPMPLCPP], [warpmplcpp], [
+    have_warpmplcpp=yes
+  ], [
+    if test "x$with_warpmplcpp" = "xyes"; then
+      # 明示的に --with-warpmplcpp が指定されたのに見つからない場合はエラーで停止
+      AC_MSG_ERROR([--with-warpmplcpp was given, but libwarpmplcpp was not found via pkg-config])
+    else
+      # auto の場合は見つからなくても続行する
+      AC_MSG_WARN([libwarpmplcpp not found; building without libwarpmplcpp support])
+    fi
+  ])
+fi
+
+# Cソース側で #ifdef HAVE_WARPMPLCPP を使えるように定義
+if test "x$have_warpmplcpp" = "xyes"; then
+  AC_DEFINE([HAVE_WARPMPLCPP], [1], [Define to 1 if you have libwarpmplcpp.])
+fi
+
+# Makefile.am 側で if WITH_WARPMPLCPP を使えるように定義
+AM_CONDITIONAL([WITH_WARPMPLCPP], [test "x$have_warpmplcpp" = "xyes"])
