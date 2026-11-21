@@ -2,16 +2,16 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-test1: test1.c .libs/libwrapmplcpp.la
-	gcc -c test1.c 
-	g++ -o test1 test1.o .libs/libwrapmplcpp.a -std=c++11 `python3-config --includes` `python3 -c 'import numpy; print("-I"+numpy.get_include())'` `python3-config --ldflags --embed`
+# test1: test1.c .libs/libwrapmplcpp.la
+# 	gcc -c test1.c 
+# 	g++ -o test1 test1.o .libs/libwrapmplcpp.a -std=c++11 `python3-config --includes` `python3 -c 'import numpy; print("-I"+numpy.get_include())'` `python3-config --ldflags --embed`
 
 
-bin_PROGRAMS = test2 test3
+bin_PROGRAMS = test1
 
 # test2 works ok
-test2_SOURCES = test1.c 
-test2_LDADD = libwrapmplcpp.la 
+test1_SOURCES = test1.c 
+test1_LDADD = libwrapmplcpp.la 
 
 ## test3 does not work
 # test3_SOURCES = test1.c wrap_matplotlibcpp.cpp
