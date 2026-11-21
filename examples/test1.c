@@ -1,5 +1,5 @@
 /*
- *  test1.c - Time-stamp: <Fri Nov 07 21:04:20 JST 2025>
+ *  test1.c - Time-stamp: <Sat Nov 21 16:57:03 JST 2026>
  *
  *   Copyright (c) 2025  jmotohisa (Junichi Motohisa)  <motohisa@ist.hokudai.ac.jp>
  *
@@ -52,7 +52,7 @@
   @return
 */
 
-#include "wrap_matplotlibcpp.h"
+#include "../src/wrap_matplotlibcpp.h"
 
 #define PROGRAM_NAME "test"
 #define CHECK(cond, msg) { if (!(cond)) { fprintf(stderr, "%s error: %s\n", PROGRAM_NAME,msg); exit(EXIT_FAILURE); } }

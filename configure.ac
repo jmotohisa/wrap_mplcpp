@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.72])
 AC_INIT(test1, 0.1a, motohisa@ist.hokudai.ac.jp)
-AC_CONFIG_SRCDIR([matplotlibcpp.h])
+AC_CONFIG_SRCDIR([src/wrap_matplotlibcpp.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 dnl AC_PROG_LIBTOOL
@@ -147,5 +147,5 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_FUNC_MALLOC
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile examples/Makefile])
 AC_OUTPUT
