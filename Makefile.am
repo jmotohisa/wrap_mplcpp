@@ -1,22 +1,25 @@
-# this Makefile works if configured by
-# $ ./configure --prefix=/Users/motohisa LDFLAGS='-L/Users/motohisa/miniconda3/envs/jm/lib -lpython3.8 -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib'
-# or
+# This Makefile works OK with ./configure
 
 ACLOCAL_AMFLAGS = -I m4
 
-bin_PROGRAMS = test1
+test1: test1.c 
+	gcc -c test1.c
+	g++ -o test1 test1.o .libs/libwrapmplcpp.a -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib -L/Users/motohisa/miniconda3/envs/jm/lib -lpython3.8
 
-test1_SOURCES = test1.c 
-test1_LDADD = libwrapmplcpp.la 
-# test1_LDFLAGS = -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib -lpython3.8
 
-# include_HEADERS = wrap_matplotlibcpp.h
+bin_PROGRAMS = test2 test3
+
+# test2 works ok
+test2_SOURCES = test1.c 
+test2_LDADD = libwrapmplcpp.la 
+test2_LDFLAGS = -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib -lpython$(PYTHON_VERSION)
+
+# test3 works ok
+test3_SOURCES = test1.c wrap_matplotlibcpp.cpp
+test3_CXXFLAGS = $(PYTHON_INCLUDES)
+test3_LDFLAGS = -lpython3.8 -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib
+
+include_HEADERS = wrap_matplotlibcpp.h
 lib_LTLIBRARIES = libwrapmplcpp.la
 libwrapmplcpp_la_SOURCES = wrap_matplotlibcpp.cpp 
 libwrapmplcpp_la_CXXFLAGS = $(PYTHON_INCLUDES)
-
-# lib_LIBRARIES = libwrapmplcpp.a
-# libwrapmplcpp_a_SOURCES = wrap_matplotlibcpp.cpp 
-# libwrapmplcpp_a_CXXFLAGS = $(PYTHON_INCLUDES)
-# libwrapmplcpp_a_LDFLAGS = $(PYTHON_LIBS) -lpython3.8 -Wl,-rpath,/Users/motohisa/miniconda3/envs/jm/lib
-
